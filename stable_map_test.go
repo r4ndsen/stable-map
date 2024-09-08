@@ -9,12 +9,17 @@ import (
 
 func TestStableMap_Reset(t *testing.T) {
 	m := NewStableMap[int, string]()
+	assert.False(t, m.Has(1))
+
 	m.Set(1, "one")
+	assert.True(t, m.Has(1))
 	m.Set(3, "three")
 
 	assert.Equal(t, "one three", strings.Join(SequenceToSlice(m.Values()), " "))
 
 	m.Reset()
+	assert.False(t, m.Has(1))
+	assert.False(t, m.Has(3))
 	m.Set(3, "three")
 	m.Set(1, "one")
 	assert.Equal(t, "three one", strings.Join(SequenceToSlice(m.Values()), " "))
@@ -37,6 +42,7 @@ func TestStableMap_Delete(t *testing.T) {
 	assert.Equal(t, "one", v)
 
 	m.Delete(1)
+	assert.False(t, m.Has(1))
 	assert.Equal(t, 1, m.Len())
 
 	v, ok = m.Get(1)
@@ -65,5 +71,4 @@ func TestShouldInsertQuickly(t *testing.T) {
 		m.Delete(i)
 	}
 	assert.Less(t, time.Since(s), time.Millisecond*250)
-
 }

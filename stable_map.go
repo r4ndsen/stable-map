@@ -119,6 +119,12 @@ func (sm *StableMap[K, V]) Get(key K) (V, bool) {
 	return res, found
 }
 
+func (sm *StableMap[K, V]) Has(key K) bool {
+	_, ok := sm.Get(key)
+
+	return ok
+}
+
 func (sm *StableMap[K, V]) All() iter.Seq2[K, V] {
 	return func(yield func(K, V) bool) {
 		for _, e := range sm.entries {
